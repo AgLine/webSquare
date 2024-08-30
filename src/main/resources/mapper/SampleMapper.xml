@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.SampleMapper">
+
+	<select id="selectAll" resultType="com.example.demo.vo.SampleVO">
+		SELECT ID
+			  ,NAME
+			  ,TEL
+		  FROM SAMPLETABLE
+		 WHERE VISIBLE = '1'
+	</select>
+	
+	<select id="serch" resultType="com.example.demo.vo.SampleVO">
+		SELECT ID
+			  ,NAME
+			  ,TEL
+		  FROM SAMPLETABLE
+		 WHERE 1=1
+		 	AND VISIBLE = '1'
+		 <if test = "id neq null and id neq ''">
+		 	AND ID = #{id}
+		 </if>
+		 <if test = "name neq null and name neq ''">
+		 	AND NAME = #{name}
+		 </if>
+		 <if test = "tel neq null and tel neq ''">
+		 	AND TEL = #{tel}
+		 </if>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO SAMPLETABLE
+			( ID
+			 ,NAME
+			 ,TEL
+			)
+		VALUES
+			( #{id}
+			 ,#{name}
+			 ,#{tel}
+			)
+	</insert>
+	
+	<update id="update">
+		UPDATE SAMPLETABlE
+		   SET NAME	= #{name}
+		      ,TEL	= #{tel}
+		 WHERE ID = #{id}
+	</update>
+	
+	<update id="del">
+		UPDATE SAMPLETABlE
+		   SET VISIBLE	= '0'
+		 WHERE ID = #{id}
+	</update>
+</mapper>

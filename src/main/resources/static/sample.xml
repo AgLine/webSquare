@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ev="http://www.w3.org/2001/xml-events"
+    xmlns:w2="http://www.inswave.com/websquare" xmlns:xf="http://www.w3.org/2002/xforms">
+    <head>
+        <w2:type>COMPONENT</w2:type>
+        <w2:buildDate/>
+        <w2:MSA/>
+        <xf:model>
+        	<w2:dataCollection baseNode="map">
+        		<w2:dataMap baseNode="map" id="dma_req" style="">
+        			<w2:keyInfo>
+        				<w2:key dataType="text" id="id" name="id"></w2:key>
+        				<w2:key dataType="text" id="name" name="이름"></w2:key>
+        				<w2:key id="tel" name="전화번호" dataType="text"></w2:key>
+        			</w2:keyInfo>
+        		</w2:dataMap>
+        		<w2:dataList baseNode="list" id="dlt_list" repeatNode="map" saveRemovedData="true" style=""
+        			ev:ondataload="scwin.dlt_list_ondataload" ev:oninsertrow="scwin.dlt_list_oninsertrow"
+        			ev:onremoverow="scwin.dlt_list_onremoverow">
+        			<w2:columnInfo>
+        				<w2:column dataType="text" id="id" name="id"></w2:column>
+        				<w2:column dataType="text" id="name" name="이름"></w2:column>
+        				<w2:column dataType="text" id="tel" name="전화번호"></w2:column>
+        			</w2:columnInfo>
+        		</w2:dataList>
+        	</w2:dataCollection>
+        	<w2:workflowCollection />
+        	<xf:submission abortTrigger="" action="/selectAll" customHandler="" encoding="UTF-8" errorHandler="" ev:submit=""
+        		ev:submitdone="" ev:submiterror="" id="sbm_selectAll" instance="" mediatype="application/json" method="post" mode="asynchronous"
+        		processMsg="" ref="" replace="" target="data:json,dlt_list" style="">
+        	</xf:submission>
+        	<xf:submission id="sbm_serch" ref="data:json,dma_req" target="data:json,dlt_list" action="/serch" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="조회중......" ev:submit="" ev:submitdone="" ev:submiterror="" abortTrigger="">
+        	</xf:submission>
+        	<xf:submission id="sbm_save" ref='data:json,{"action":"modified","id":"dlt_list"}' target="" action="/save" method="post"
+        		mediatype="application/json" encoding="UTF-8" instance="" replace="" errorHandler="" customHandler="" mode="asynchronous"
+        		processMsg="" ev:submit="" ev:submitdone="" ev:submiterror="" abortTrigger="">
+        	</xf:submission>
+        </xf:model>
+        <w2:layoutInfo/>
+        <w2:publicInfo method=""/>
+        <script lazy="false" type="text/javascript"><![CDATA[
+scwin.onpageload = function() {
+	$p.executeSubmission("sbm_selectAll");
+};
+
+scwin.btn_serch_onclick = function(e) {
+	$p.executeSubmission("sbm_serch");
+};
+
+function CheckKo(inputValue) {
+	var regExp = /^[A-Za-z]*$/;
+	if (!regExp.test(inputValue)) {
+		alert("이름이 정확하지 않습니다.");
+		return inputValue;
+	}
+}
+
+
+scwin.input_id_onchange = function(info) {
+	checkKo(input_id.getValue());
+};
+
+scwin.input_id_onkeyup = function(e) {
+
+};
+
+
+scwin.dlt_list_ondataload = function() {
+	span_cnt.setValue(dlt_list.getRowCount());
+};
+
+scwin.dlt_list_oninsertrow = function(info) {
+	span_cnt.setValue(dlt_list.getRowCount());
+};
+
+scwin.dlt_list_onremoverow = function(info) {
+	span_cnt.setValue(dlt_list.getRowCount());
+};
+
+scwin.btn_insert_onclick = function(e) {
+	dlt_list.insertRow(0);
+};
+
+scwin.btn_save_onclick = function(e) {
+	$p.executeSubmission("sbm_save");
+	$p.reinitialize();
+};
+
+scwin.btn_del_onclick = function(e) {
+	var focusIdx = user_grid.getFocusedRowIndex();
+	dlt_list.deleteRow(focusIdx);
+};
+]]></script>
+    </head>
+    <body ev:onpageload="scwin.onpageload">
+    	<xf:group class="sub_contents" id="" style="">
+    		<xf:group class="pgtbox" id="" style="">
+    			<xf:trigger class="btn_fav" id="" style="" type="button">
+    				<xf:label></xf:label>
+    			</xf:trigger>
+    			<w2:textbox class="pgt_tit" id="" label="SpirngBoot 2.7.5" style="" tagname=""></w2:textbox>
+    			<xf:group class="breadcrumb" id="" style=""></xf:group>
+    		</xf:group>
+    		<xf:group class="schbox" id="" style="">
+    			<xf:group class="schbox_inner" id="" style="">
+    				<xf:group adaptive="layout" adaptiveThreshold="768" class="w2tb tbl " id="" style="" tagname="table">
+    					<w2:attributes>
+    						<w2:summary></w2:summary>
+    					</w2:attributes>
+    					<xf:group tagname="colgroup">
+    						<xf:group style="width:100px;" tagname="col"></xf:group>
+    						<xf:group style="" tagname="col"></xf:group>
+    						<xf:group style="width:100px;" tagname="col"></xf:group>
+    						<xf:group style="" tagname="col"></xf:group>
+    					</xf:group>
+    					<xf:group class="" id="" style="" tagname="tr">
+    						<xf:group class="w2tb_th" style="" tagname="th">
+    							<w2:textbox class="" id="" label="ID" style=""></w2:textbox>
+    						</xf:group>
+    						<xf:group class="w2tb_td" style="" tagname="td">
+    							<xf:input id="input_id" style="width: 144px;height: 21px;" ref="data:dma_req.id" validator="checkKo"
+    								validateOnInput="false" ev:onchange="scwin.input_id_onchange" ev:onkeyup="scwin.input_id_onkeyup">
+    							</xf:input>
+    						</xf:group>
+    						<xf:group class="w2tb_th" style="" tagname="th">
+    							<w2:textbox class="" id="" label="이름" style=""></w2:textbox>
+    						</xf:group>
+    						<xf:group class="w2tb_td" id="" style="" tagname="td">
+    							<xf:input id="" style="width: 144px;height: 21px;" ref="data:dma_req.name"></xf:input>
+    						</xf:group>
+    					</xf:group>
+    					<xf:group class="" id="" style="" tagname="tr">
+    						<xf:group class="w2tb_th" style="" tagname="th">
+    							<w2:textbox class="" id="" label="전화번호" style=""></w2:textbox>
+    						</xf:group>
+    						<xf:group class="w2tb_td" style="" tagname="td">
+    							<xf:input id="" style="width: 144px;height: 21px;" ref="data:dma_req.tel"></xf:input>
+    						</xf:group>
+    						<xf:group class="w2tb_th" style="" tagname="th"><w2:span dataType="number" style="" label="0" id="span_cnt"></w2:span></xf:group>
+    						<xf:group class="w2tb_td" id="" style="" tagname="td">
+    							<w2:span label="건" style="" id=""></w2:span>
+    						</xf:group>
+    					</xf:group>
+    				</xf:group>
+    			</xf:group>
+    			<xf:group class="btn_schbox" id="" style="">
+    				<xf:trigger class="btn_cm sch" disabled="" escape="false" id="btn_serch" style="" type="button"
+    					ev:onclick="scwin.btn_serch_onclick">
+    					<xf:label><![CDATA[조회]]></xf:label>
+    				</xf:trigger>
+    			</xf:group>
+
+    		</xf:group><xf:group adaptiveThreshold="" class="gvwbox" id="" style="">
+    			<w2:gridView autoFit="allColumn" checkReadOnlyOnPasteEnable="" class="gvw" dataList="data:dlt_list" defaultCellHeight="26"
+    				focusMode="row" id="user_grid" keepDefaultColumnWidth="true" rowNumHeaderValue="No" rowNumVisible="true" rowNumWidth="50"
+    				rowStatusHeaderValue="상태" rowStatusVisible="true" rowStatusWidth="50" scrollByColumn="false" scrollByColumnAdaptive="false"
+    				style="height: 150px;" visibleRowNum="10" readOnly="false">
+    				<w2:caption style="" id="caption1" value="this is a grid caption."></w2:caption>
+    				<w2:header style="" id="header1">
+    					<w2:row style="" id="row1">
+    						<w2:column width="50" inputType="text" id="column3" value="id" displayMode="label" readOnly="true"></w2:column>
+    						<w2:column width="50" inputType="text" id="column2" value="이름" displayMode="label"></w2:column>
+    						<w2:column width="80" inputType="text" id="column1" value="전화번호" displayMode="label"></w2:column>
+    					</w2:row>
+    				</w2:header>
+    				<w2:gBody style="" id="gBody1">
+    					<w2:row style="" id="row2">
+    						<w2:column width="50" inputType="text" id="id" displayMode="label"></w2:column>
+    						<w2:column width="50" inputType="text" id="name" displayMode="label"></w2:column>
+    						<w2:column width="80" inputType="text" id="tel" displayMode="label"></w2:column>
+    					</w2:row>
+    				</w2:gBody>
+    			</w2:gridView>
+    			
+    			
+    		</xf:group>
+    		<xf:group class="sub_contents" id="" style="float:right;clear:both;">
+    			<xf:trigger type="button" id="btn_insert" style="width: 80px;height: 23px;" class="btn_cm  row_add"
+    				ev:onclick="scwin.btn_insert_onclick">
+    				<xf:label><![CDATA[행추가]]></xf:label>
+    			</xf:trigger>
+    			<xf:trigger type="button" id="btn_del" style="width: 80px;height: 23px;" class="btn_cm  row_del" ev:onclick="scwin.btn_del_onclick">
+    				<xf:label><![CDATA[행삭제]]></xf:label>
+    			</xf:trigger>
+    			<xf:trigger type="button" id="btn_save" style="width: 80px;height: 23px;" ev:onclick="scwin.btn_save_onclick" class="btn_cm pt">
+    				<xf:label><![CDATA[저장]]></xf:label>
+    			</xf:trigger>
+    		</xf:group>
+    	</xf:group>
+    </body>
+</html>
